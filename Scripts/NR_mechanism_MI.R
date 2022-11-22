@@ -327,7 +327,7 @@ dev.off()
 
 ### Multiple imputation
 
-
+set.seed(1)
 m0 <- mice(KoCo19[, list_var], seed = 1)
 
 # Imputation method for each variable
@@ -343,13 +343,8 @@ pred[, colnames(pred) %in% c("ind_id", "hh_id",
                              "t_start", "t_end", "ever_pos",
                              "ind_nr_r2", "ind_nr_r3", "ind_nr_r4", "ind_nr_r5")] <- 0 
 
+set.seed(1)
 res.imp <- mice(KoCo19[, list_var], predictorMatrix = pred, seed = 1)
-
-test <- res.imp
-
-test <- readRDS("C:/Users/ronan.legleut/Nextcloud/Core Facility Statistical Consulting/Consulting/Projects/P_258_RLG_Corona/Round_5/Results/Results_mi.RDS")
-
-identical(test, res.imp)
 
 # Save for Risk factor analysis
 saveRDS(res.imp, here_koco_results("Results_mi.RDS"))
