@@ -1,10 +1,13 @@
-# KoCo19 Round 3 and 4 Epidemiological Analysis
+# KoCo19 Epidemiological Analysis
 
-Code for the statistical epidemiological analysis of the third and fourth round of the prospective Covid-19 cohort study in Munich KoCo19. The study website is http://koco19.de, see there for further information. 
+Code for the statistical epidemiological analysis of the prospective Covid-19 cohort study in Munich KoCo19. The study website is http://koco19.de, see there for further information. 
 
 ## Structure
 
 The code is located in the following folders:
+
+* `/Data`: 
+* `/Figures`: 
 
 * `/Statistics`: Contains the code for estimating the unweighted point estimates and associated confidence intervals for overall and weekly prevalences.
 * `/Output`: Contains the results for the unweighted prevalence estimates.
