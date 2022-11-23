@@ -6,13 +6,11 @@
 
 run <- function(seed){
   
-  rm(list = ls())
-
-
-  here_koco_scripts = function (...) here::here("Scripts", ...)
   here_koco_data = function (...) here::here("Data", ...)
-  here_koco_results = function (...) here::here("Results", ...)
-  
+  here_koco_prev = function (...) here::here("Seroprevalence", ...)
+  here_prev_figures = function (...) here_koco_prev("Figures", ...)
+  here_prev_results = function (...) here_koco_prev("Results", ...)
+  here_prev_scripts = function (...) here_koco_prev("Scripts", ...)
   
   
   #############################
@@ -23,7 +21,7 @@ run <- function(seed){
   # Sampling Weights
   ###
   
-  KoCo_BLab <- readRDS(here_koco_results("SamplingWeights.RDS"))
+  KoCo_BLab <- readRDS(here_koco_data("R1/SamplingWeights.RDS"))
   
   
   ###
@@ -615,7 +613,7 @@ run <- function(seed){
   
   ### Removing temporary data
   rm(list = setdiff(ls(), c("KoCo_BLab", "data_house", "Const", "Munich_hh", "d_house",
-                            "here_koco_data", "here_koco_results", "here_koco_scripts")))
+                            "here_koco_data", "here_koco_prev", "here_prev_results", "here_prev_scripts")))
   
   #############################
   # Variance of the calibrated estimator
@@ -1017,7 +1015,7 @@ run <- function(seed){
   # Adjusted % of positive S1 or N positive
   res_all <- rbind(res_all, c(Adjust = "adjusted", Calculation = "S_N_pos", (nb_S_pos + adj_nb_N_pos_S_neg) / nb_ppl*100))
   
-  write.csv(res_all, paste0(here_koco_results("R5"), "/r5_cum_sp_w_seed", seed, ".csv"), row.names = FALSE)
+  write.csv(res_all, paste0(here_prev_results("R5"), "/r5_cum_sp_w_seed", seed, ".csv"), row.names = FALSE)
   
 }
 

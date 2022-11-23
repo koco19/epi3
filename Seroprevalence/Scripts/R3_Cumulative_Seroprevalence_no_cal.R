@@ -2,17 +2,18 @@
 #' for the third round of visit and calculates the variance associated with the estimation of the proportion of ppl.
 #' infected by the virus (positive tested).
 #' We consider that if someone was positive once in the past, this person is positive for the next rounds
-#' We calibrate on the number of vaccinated persons in Munich.
+#' We do not calibrate on the number of vaccinated persons in Munich.
 
 run <- function(seed){
   
-  rm(list = ls())
+
+  here_koco_data = function (...) here::here("Data", ...)
+  here_koco_prev = function (...) here::here("Seroprevalence", ...)
+  here_prev_figures = function (...) here_koco_prev("Figures", ...)
+  here_prev_results = function (...) here_koco_prev("Results", ...)
+  here_prev_scripts = function (...) here_koco_prev("Scripts", ...)
   
 
-  here_koco_scripts = function (...) here::here("Scripts", ...)
-  here_koco_data = function (...) here::here("Data", ...)
-  here_koco_results = function (...) here::here("Results", ...)
-  
   #############################
   # Load data sets
   #############################
@@ -21,7 +22,7 @@ run <- function(seed){
   # Sampling Weights
   ###
   
-  KoCo_BLab <- readRDS(here_koco_results("SamplingWeights.RDS"))
+  KoCo_BLab <- readRDS(here_koco_data("R1/SamplingWeights.RDS"))
   
   
   
@@ -83,6 +84,7 @@ run <- function(seed){
   
   
   ### Sex/Age distribution
+  
   margins_age_sex <- read.csv(here_koco_data("R3/muc_age_structure_KoCo_study_pop.csv"), stringsAsFactors = F)
   
   # Rename variables to match the included information 
@@ -129,7 +131,6 @@ run <- function(seed){
   KoCo_BLab <- KoCo_BLab[setdiff(names(KoCo_BLab), c("Q6_f1_Geburtsdatum_DDMONYYYY", "date_R3", "Age2"))]
   
   
-  
   #############################
   # Define sample for the third round
   #############################
@@ -172,14 +173,7 @@ run <- function(seed){
   country_germany_unknow <- 890546
   country_other <-  sum(totals) - country_germany_unknow
   
-  ###
-  # Total number of vaccinated ppl (1 dose)
-  ###
-  
-  # https://www.muenchen.de/rathaus/Stadtinfos/Coronavirus-Fallzahlen.html#Impfungen
-  n_pos <- 149536
-  n_neg <- sum(totals) - n_pos
-  
+ 
   ###
   # Nb of single/multi-ppl hh and hh with/without children in Munich (based on KoCo19, stat. Amt)
   ###
@@ -201,12 +195,11 @@ run <- function(seed){
   # Summarizing the information about Munich
   ###
   totals <- c(totals, country_germany_unknow = country_germany_unknow, country_other = country_other,
-              n_pos = n_pos, n_neg = n_neg,
               n_1_house = n_1_house, n_2_house = n_2_house, n_multi_house = n_multi_house,
               n_house_0_child = n_house_0_child, n_house_1plus_child = n_house_1plus_child)
   
   # Removing temporary data
-  rm(margins_age_sex, country_germany_unknow, country_other, n_pos, n_neg, n_1_house, n_2_house, n_multi_house, n_house_0_child, n_house_1plus_child)
+  rm(margins_age_sex, country_germany_unknow, country_other, n_1_house, n_2_house, n_multi_house, n_house_0_child, n_house_1plus_child)
   
   
   #############################
@@ -244,9 +237,7 @@ run <- function(seed){
   # Creating a variable including the information about hh_id and country categories
   KoCo_BLab$hh_country <- paste(KoCo_BLab$hh_id, KoCo_BLab$Birth_Country, sep = "_")
   
-  # Creating a variable including the information about hh_id and vaccination
-  KoCo_BLab$hh_vax <- paste(KoCo_BLab$hh_id, KoCo_BLab$R3_Vaccination, sep = "_")
-  
+ 
   ###
   # Roche
   ###
@@ -290,27 +281,6 @@ run <- function(seed){
   # Merging of the two information
   data_house <- merge(data_house, data_house2, by = "hh_id")
   
-  ### Vaccination
-  
-  # Calculating the number vaccinated/non vaccinated in each household
-  n_vax <- freq(KoCo_BLab$hh_vax, w = KoCo_BLab$w_ind, plot=F)
-  
-  # Removing the line for totals
-  n_vax <- n_vax[-nrow(n_vax), ]
-  
-  # Splitting the information saved in the variable about hh_id and vaccination
-  n_vax <- data.frame(hh_id = substr(rownames(n_vax), 1, 7),
-                      vax = substr(rownames(n_vax), 9, 15),
-                      freq = n_vax[, "Frequency"])
-  
-  
-  # Reshaping the dataframe to have for each hh the number of ppl based on contry of origin
-  data_house2 <- reshape(n_vax, v.names = "freq",
-                         timevar = "vax", idvar = "hh_id", direction = "wide")
-  
-  # Merging of the two information
-  data_house <- merge(data_house, data_house2, by = "hh_id")
-  
   # Setting empty cells to 0
   data_house[is.na(data_house)] <- 0
   
@@ -322,7 +292,7 @@ run <- function(seed){
   # Reordering the columns
   data_house <- data_house[, c("hh_id", "Male_<=19", "Male_20-34", "Male_35-49", "Male_50-64", "Male_65-79", "Male_>=80",
                                "Female_<=19", "Female_20-34", "Female_35-49", "Female_50-64", "Female_65-79", "Female_>=80",
-                               "Germany", "Other", "Positiv", "Negativ")]
+                               "Germany", "Other")]
   
   
   
@@ -365,7 +335,7 @@ run <- function(seed){
   
   
   # removing temporary data
-  rm(n_sex_age, n_country, n_vax, KoCo19, data_house2, nb_child)
+  rm(n_sex_age, n_country, KoCo19, data_house2, nb_child)
   
   #############################
   # Non response treatment
@@ -577,9 +547,10 @@ run <- function(seed){
   
   freq(x = KoCo_BLab$R3_S1_N, w = KoCo_BLab$w_ind_cal, plot=F)
   
+  
   ### Removing temporary data
   rm(list = setdiff(ls(), c("KoCo_BLab", "data_house", "Const", "Munich_hh", "d_house",
-                            "here_koco_data", "here_koco_results", "here_koco_scripts")))
+                            "here_koco_data", "here_koco_prev", "here_prev_results", "here_prev_scripts")))
   
   #############################
   # Variance of the calibrated estimator
@@ -723,7 +694,7 @@ run <- function(seed){
   ###
   
   res.lm <- lapply(0:(length(group)+2), function(x){
-    res.lm <- lm(as.formula(paste(paste0("V",x+1), paste(paste0("`", names(data_house[, 2:22]), "`"), collapse=" + "), sep=" ~ ")), 
+    res.lm <- lm(as.formula(paste(paste0("V",x+1), paste(paste0("`", names(data_house[, 2:20]), "`"), collapse=" + "), sep=" ~ ")), 
                  weights = d_house,
                  data = data_house)
   })
@@ -932,7 +903,7 @@ run <- function(seed){
   # Adjusted % of positive S1 or N positive
   res_all <- rbind(res_all, c(Adjust = "adjusted", Calculation = "S_N_pos", (nb_S_pos + adj_nb_N_pos_S_neg) / nb_ppl*100))
   
-  write.csv(res_all, paste0(here_koco_results("R3"), "/r3_cum_sp_w_seed", seed, ".csv"), row.names = FALSE)
+  write.csv(res_all, paste0(here_prev_results("R3"), "/r3_cum_sp_w_no_cal_seed", seed, ".csv"), row.names = FALSE)
   
   
 }

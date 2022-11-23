@@ -7,10 +7,12 @@ run_boot <- function(seed, boot = NULL){
   
   # boot = number of bootstrap samples for cluster bootstrap
   
-
-  here_koco_scripts = function (...) here::here("Scripts", ...)
   here_koco_data = function (...) here::here("Data", ...)
-  here_koco_results = function (...) here::here("Results", ...)
+  here_koco_prev = function (...) here::here("Seroprevalence", ...)
+  here_prev_figures = function (...) here_koco_prev("Figures", ...)
+  here_prev_results = function (...) here_koco_prev("Results", ...)
+  here_prev_scripts = function (...) here_koco_prev("Scripts", ...)
+  
   
   ########
   # Data #
@@ -93,7 +95,7 @@ run_boot <- function(seed, boot = NULL){
   # Save Results
   ###
   
-  saveRDS(res, paste0(here_koco_results("Unweighted"), "/si_uw_seed", seed, ".RDS"))
+  saveRDS(res, paste0(here_prev_results("Unweighted"), "/si_uw_seed", seed, ".RDS"))
   
   ###
   # unweighted seroprevalence for vaccinated and non vaccinated with bootstrap CI
@@ -179,7 +181,7 @@ run_boot <- function(seed, boot = NULL){
   # Save Results
   ###
   
-  saveRDS(res_vax, paste0(here_koco_results("Unweighted"), "/sp_vax_uw_seed", seed, ".RDS"))
+  saveRDS(res_vax, paste0(here_prev_results("Unweighted"), "/sp_vax_uw_seed", seed, ".RDS"))
   
   
   ###
@@ -273,7 +275,7 @@ run_boot <- function(seed, boot = NULL){
   ###
   
   
-  saveRDS(res_vax, paste0(here_koco_results("Unweighted"), "/si_vax_uw_seed", seed, ".RDS"))
+  saveRDS(res_vax, paste0(here_prev_results("Unweighted"), "/si_vax_uw_seed", seed, ".RDS"))
   
   
   

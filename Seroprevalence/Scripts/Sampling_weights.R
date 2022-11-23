@@ -5,12 +5,11 @@
 #' for the random routes crossing the boundaries of the constituencies.
 
 
-
-rm(list = ls())
-
-here_koco_scripts = function (...) here::here("Scripts", ...)
 here_koco_data = function (...) here::here("Data", ...)
-here_koco_results = function (...) here::here("Results", ...)
+here_koco_prev = function (...) here::here("Seroprevalence", ...)
+here_prev_figures = function (...) here_koco_prev("Figures", ...)
+here_prev_results = function (...) here_koco_prev("Results", ...)
+here_prev_scripts = function (...) here_koco_prev("Scripts", ...)
 
 
 #############################
@@ -238,4 +237,4 @@ KoCo_BLab$w_ind_samp <- KoCo_BLab$w_constituency * KoCo_BLab$w_household * KoCo_
 
 KoCo_BLab <- KoCo_BLab[setdiff(names(KoCo_BLab), "Age")]
 
-saveRDS(KoCo_BLab, file = here_koco_results("SamplingWeights.RDS"))
+saveRDS(KoCo_BLab, file = here_koco_data("R1/SamplingWeights.RDS"))

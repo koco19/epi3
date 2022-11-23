@@ -3,10 +3,11 @@
 
 aggregate_res_uw <- function(seeds = 1:100){
   
-  # rm(list = ls())
-  
-  here_koco_scripts = function (...) here::here("Scripts", ...)
-  here_koco_results = function (...) here::here("Results", ...)
+  here_koco_data = function (...) here::here("Data", ...)
+  here_koco_prev = function (...) here::here("Seroprevalence", ...)
+  here_prev_figures = function (...) here_koco_prev("Figures", ...)
+  here_prev_results = function (...) here_koco_prev("Results", ...)
+  here_prev_scripts = function (...) here_koco_prev("Scripts", ...)
   
   
   # Aggregate the results
@@ -15,9 +16,9 @@ aggregate_res_uw <- function(seeds = 1:100){
   res_sp_vax <- list()
   
   for(i in seeds){
-    res_si[[i]] <- readRDS(paste0(here_koco_results("Unweighted"), "/si_uw_seed", i,".RDS"))
-    res_si_vax[[i]] <- readRDS(paste0(here_koco_results("Unweighted"), "/si_vax_uw_seed", i,".RDS"))
-    res_sp_vax[[i]] <- readRDS(paste0(here_koco_results("Unweighted"), "/sp_vax_uw_seed", i,".RDS"))
+    res_si[[i]] <- readRDS(paste0(here_prev_results("Unweighted"), "/si_uw_seed", i,".RDS"))
+    res_si_vax[[i]] <- readRDS(paste0(here_prev_results("Unweighted"), "/si_vax_uw_seed", i,".RDS"))
+    res_sp_vax[[i]] <- readRDS(paste0(here_prev_results("Unweighted"), "/sp_vax_uw_seed", i,".RDS"))
   }
   
   res.fin <- lapply(list(res_si, res_si_vax, res_sp_vax), function(res){
@@ -59,20 +60,20 @@ aggregate_res_uw <- function(seeds = 1:100){
   res.fin[[1]]$round <- rep(c("R2", "R3", "R4", "R5"), 2)
   res.fin[[1]]$Adjust <- rep(c("unadjusted", "adjusted"), each = 4)
   
-  saveRDS(res.fin[[1]], here_koco_results("si_uw.RDS"))
+  saveRDS(res.fin[[1]], here_prev_results("si_uw.RDS"))
   
   # Save results seroincidence vax no vax
   res.fin[[2]]$round <- rep(c("R4", "R5"), each = 2, times = 2)
   res.fin[[2]]$vax <- rep(c("Negative", "Positive"), 4)
   res.fin[[2]]$Adjust <- rep(c("unadjusted", "adjusted"), each = 4)
   
-  saveRDS(res.fin[[2]], here_koco_results("si_vax_uw.RDS"))
+  saveRDS(res.fin[[2]], here_prev_results("si_vax_uw.RDS"))
   
   # Save results seroprevalence vax no vax
   res.fin[[3]]$round <- rep(c("R3", "R4", "R5"), each = 2, times = 2)
   res.fin[[3]]$vax <- rep(c("Negative", "Positive"), 6)
   res.fin[[3]]$Adjust <- rep(c("unadjusted", "adjusted"), each = 6)
   
-  saveRDS(res.fin[[3]], here_koco_results("sp_vax_uw.RDS"))
+  saveRDS(res.fin[[3]], here_prev_results("sp_vax_uw.RDS"))
   
 }

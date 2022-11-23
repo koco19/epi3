@@ -2,13 +2,11 @@
 #' for the first round of visit and calculates the variance associated with the estimation of the proportion of ppl.
 #' infected by the virus (positive tested).
 
-rm(list = ls())
-
-
-here_koco_scripts = function (...) here::here("Scripts", ...)
 here_koco_data = function (...) here::here("Data", ...)
-here_koco_results = function (...) here::here("Results", ...)
-
+here_koco_prev = function (...) here::here("Seroprevalence", ...)
+here_prev_figures = function (...) here_koco_prev("Figures", ...)
+here_prev_results = function (...) here_koco_prev("Results", ...)
+here_prev_scripts = function (...) here_koco_prev("Scripts", ...)
 
 #############################
 # Load data sets
@@ -19,7 +17,7 @@ here_koco_results = function (...) here::here("Results", ...)
 ###
 
 
-KoCo_BLab <- readRDS(here_koco_results("SamplingWeights.RDS"))
+KoCo_BLab <- readRDS(here_koco_data("R1/SamplingWeights.RDS"))
 
 
 
@@ -357,7 +355,7 @@ freq(x = KoCo_BLab$R1_Result, w = KoCo_BLab$w_ind_cal, plot=F)
 
 ### Removing temporary data
 rm(list = setdiff(ls(), c("KoCo_BLab", "data_house", "Const", "Munich_hh", "d_house",
-                          "here_koco_data", "here_koco_results", "here_koco_scripts")))
+                          "here_koco_data", "here_koco_prev", "here_prev_results", "here_prev_scripts")))
 
 
 #############################
@@ -520,4 +518,4 @@ res_all <- res_all <- data.frame(Adjust = c("unadjusted", "adjusted"),
                                  rbind(res_w, res_adj))
 
 
-write.csv(res_all, here_koco_results("r1_sp_w.csv"), row.names = FALSE)
+write.csv(res_all, here_prev_results("r1_sp_w.csv"), row.names = FALSE)

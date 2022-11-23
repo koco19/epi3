@@ -3,10 +3,11 @@
 
 impute <- function(seed){
   
-  rm(list = ls())
-  
-  here_koco_scripts = function (...) here::here("Scripts", ...)
   here_koco_data = function (...) here::here("Data", ...)
+  here_koco_prev = function (...) here::here("Seroprevalence", ...)
+  here_prev_figures = function (...) here_koco_prev("Figures", ...)
+  here_prev_results = function (...) here_koco_prev("Results", ...)
+  here_prev_scripts = function (...) here_koco_prev("Scripts", ...)
   
   KoCo_BLab <- readRDS(here_koco_data("R5/R5_CompleteData_NC.RDS"))
   

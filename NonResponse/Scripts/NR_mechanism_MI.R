@@ -3,10 +3,33 @@
 
 rm(list = ls())
 
+if (!require("pacman")) install.packages("pacman")
+library(pacman)
+
+p_load(Amelia)
+p_load(descr)
+p_load(reshape2)
+p_load(sampling)
+p_load(lubridate)
+p_load(tidyverse)
+p_load(data.table)
+p_load(ggplot2)
+p_load(ggpattern)
+p_load(gg.gap)
+p_load(cowplot)
+p_load(pdftools)
+p_load(ggrepel)
+p_load(scales)
+p_load(car)
+p_load(openxlsx)
+p_load(naniar)
+p_load(mice)
+
 
 here_koco_data = function (...) here::here("Data", ...)
-here_koco_figures = function (...) here::here("Figures", ...)
-here_koco_results = function (...) here::here("Results", ...)
+here_koco_nr = function (...) here::here("NonResponse", ...)
+here_nr_figures = function (...) here_koco_nr("Figures", ...)
+here_nr_results = function (...) here_koco_nr("Results", ...)
 
 
 ########
@@ -316,7 +339,7 @@ names(KoCo_plot)[names(KoCo_plot) %in% list_var] <- list_var_plot
 
 
 ### Missing pattern
-png(here_koco_figures("NR.png"), width = 1500, height = 1000, res = 190)
+png(here_nr_figures("NR.png"), width = 1500, height = 1000, res = 190)
 # gg_miss_upset(KoCo19[, list_var], nsets = 20, text.scale = 0.8)
 gg_miss_upset(KoCo_plot[, list_var_plot], nsets = 20, text.scale = 0.9)
 dev.off()
@@ -347,7 +370,7 @@ set.seed(1)
 res.imp <- mice(KoCo19[, list_var], predictorMatrix = pred, seed = 1)
 
 # Save for Risk factor analysis
-saveRDS(res.imp, here_koco_results("Results_mi.RDS"))
+saveRDS(res.imp, here_koco_data("Multiple_Imputation/Results_mi.RDS"))
 
 
 #############################
@@ -686,7 +709,7 @@ res.coef$R5 <- coef_r5
 # Export all #
 ##############
 
-write.xlsx(res.coef, file = here_koco_results("NR_mechanism_MI.xlsx"), overwrite = TRUE)
+write.xlsx(res.coef, file = here_nr_results("NR_mechanism_MI.xlsx"), overwrite = TRUE)
 
 
 

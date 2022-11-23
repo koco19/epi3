@@ -5,9 +5,11 @@ run_sp_boot <- function(boot = NULL){
  
   # boot = number of bootstrap samples for cluster bootstrap
   
-  here_koco_scripts = function (...) here::here("Scripts", ...)
   here_koco_data = function (...) here::here("Data", ...)
-  here_koco_results = function (...) here::here("Results", ...)
+  here_koco_prev = function (...) here::here("Seroprevalence", ...)
+  here_prev_figures = function (...) here_koco_prev("Figures", ...)
+  here_prev_results = function (...) here_koco_prev("Results", ...)
+  here_prev_scripts = function (...) here_koco_prev("Scripts", ...)
   
   ########
   # Data #
@@ -115,7 +117,7 @@ run_sp_boot <- function(boot = NULL){
   # Save Results
   ###
   
-  saveRDS(res, here_koco_results("sp_uw.RDS"))
+  saveRDS(res, here_prev_results("sp_uw.RDS"))
   
    
 }

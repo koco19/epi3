@@ -1,12 +1,11 @@
 #' This script plots the sero-prevalence estimates (weighted, unweighted,
 #' split according to the vaccintation status, etc.)
 
-rm(list = ls())
-
-here_koco_scripts = function (...) here::here("Scripts", ...)
-here_koco_results = function (...) here::here("Results", ...)
 here_koco_data = function (...) here::here("Data", ...)
-here_koco_figures = function (...) here::here("Figures", ...)
+here_koco_prev = function (...) here::here("Seroprevalence", ...)
+here_prev_figures = function (...) here_koco_prev("Figures", ...)
+here_prev_results = function (...) here_koco_prev("Results", ...)
+here_prev_scripts = function (...) here_koco_prev("Scripts", ...)
 
 
 # Number of participants for the different rounds
@@ -39,17 +38,17 @@ large_points <- function(data, params, size) {
 ###
 
 # Unweighted
-sp_uw <- readRDS(here_koco_results("sp_uw.RDS"))
+sp_uw <- readRDS(here_prev_results("sp_uw.RDS"))
 
 # Weighted
-sp_w_r1 <- read.csv(here_koco_results("r1_sp_w.csv"))
-sp_w_r2 <- read.csv(here_koco_results("r2_cum_sp_w.csv"))
-sp_w_r3 <- read.csv(here_koco_results("r3_cum_sp_w.csv"))
-sp_w_r3_no_cal <- read.csv(here_koco_results("r3_cum_sp_w_no_cal.csv"))
-sp_w_r4 <- read.csv(here_koco_results("r4_cum_sp_w.csv"))
-sp_w_r4_no_cal <- read.csv(here_koco_results("r4_cum_sp_w_no_cal.csv"))
-sp_w_r5 <- read.csv(here_koco_results("r5_cum_sp_w.csv"))
-sp_w_r5_no_cal <- read.csv(here_koco_results("r5_cum_sp_w_no_cal.csv"))
+sp_w_r1 <- read.csv(here_prev_results("r1_sp_w.csv"))
+sp_w_r2 <- read.csv(here_prev_results("r2_cum_sp_w.csv"))
+sp_w_r3 <- read.csv(here_prev_results("r3_cum_sp_w.csv"))
+sp_w_r3_no_cal <- read.csv(here_prev_results("r3_cum_sp_w_no_cal.csv"))
+sp_w_r4 <- read.csv(here_prev_results("r4_cum_sp_w.csv"))
+sp_w_r4_no_cal <- read.csv(here_prev_results("r4_cum_sp_w_no_cal.csv"))
+sp_w_r5 <- read.csv(here_prev_results("r5_cum_sp_w.csv"))
+sp_w_r5_no_cal <- read.csv(here_prev_results("r5_cum_sp_w_no_cal.csv"))
 
                                   
 
@@ -142,18 +141,18 @@ g_prev_inf <- ggplot(res, aes(x = date, y = estimate, group = Prevalence)) +
 ###
 
 # Unweighted
-sp_uw <- readRDS(here_koco_results("sp_uw.RDS"))
-si_uw <- readRDS(here_koco_results("si_uw.RDS"))
+sp_uw <- readRDS(here_prev_results("sp_uw.RDS"))
+si_uw <- readRDS(here_prev_results("si_uw.RDS"))
 
 # Weighted
-sp_w_r1 <- read.csv(here_koco_results("r1_sp_w.csv"))
-si_w_r2 <- read.csv(here_koco_results("r2_cum_sp_w.csv"))
-si_w_r3 <- read.csv(here_koco_results("r3_cum_sp_w.csv"))
-si_w_r3_no_cal <- read.csv(here_koco_results("r3_cum_sp_w_no_cal.csv"))
-si_w_r4 <- read.csv(here_koco_results("r4_cum_sp_w.csv"))
-si_w_r4_no_cal <- read.csv(here_koco_results("r4_cum_sp_w_no_cal.csv"))
-si_w_r5 <- read.csv(here_koco_results("r5_cum_sp_w.csv"))
-si_w_r5_no_cal <- read.csv(here_koco_results("r5_cum_sp_w_no_cal.csv"))
+sp_w_r1 <- read.csv(here_prev_results("r1_sp_w.csv"))
+si_w_r2 <- read.csv(here_prev_results("r2_cum_sp_w.csv"))
+si_w_r3 <- read.csv(here_prev_results("r3_cum_sp_w.csv"))
+si_w_r3_no_cal <- read.csv(here_prev_results("r3_cum_sp_w_no_cal.csv"))
+si_w_r4 <- read.csv(here_prev_results("r4_cum_sp_w.csv"))
+si_w_r4_no_cal <- read.csv(here_prev_results("r4_cum_sp_w_no_cal.csv"))
+si_w_r5 <- read.csv(here_prev_results("r5_cum_sp_w.csv"))
+si_w_r5_no_cal <- read.csv(here_prev_results("r5_cum_sp_w_no_cal.csv"))
 
 ###
 # Create table for the plot
@@ -234,11 +233,11 @@ g_inc_inf <- ggplot(res, aes(x = date, y = estimate, group = Incidence)) +
 ###
 
 # Weighted
-sp_w_r1 <- read.csv(here_koco_results("r1_sp_w.csv"))
-sp_w_r2 <- read.csv(here_koco_results("r2_cum_sp_w.csv"))
-sp_w_r3 <- read.csv(here_koco_results("r3_cum_sp_w.csv"))
-sp_w_r4 <- read.csv(here_koco_results("r4_cum_sp_w.csv"))
-sp_w_r5 <- read.csv(here_koco_results("r5_cum_sp_w.csv"))
+sp_w_r1 <- read.csv(here_prev_results("r1_sp_w.csv"))
+sp_w_r2 <- read.csv(here_prev_results("r2_cum_sp_w.csv"))
+sp_w_r3 <- read.csv(here_prev_results("r3_cum_sp_w.csv"))
+sp_w_r4 <- read.csv(here_prev_results("r4_cum_sp_w.csv"))
+sp_w_r5 <- read.csv(here_prev_results("r5_cum_sp_w.csv"))
 
 
 
@@ -326,11 +325,11 @@ g_prev_vax <- ggplot(res, aes(x = date, y = estimate, group = Calculation)) +
 ###
 
 # Weighted
-sp_w_r1 <- read.csv(here_koco_results("r1_sp_w.csv"))
-si_w_r2 <- read.csv(here_koco_results("r2_cum_sp_w.csv"))
-si_w_r3 <- read.csv(here_koco_results("r3_cum_sp_w.csv"))
-si_w_r4 <- read.csv(here_koco_results("r4_cum_sp_w.csv"))
-si_w_r5 <- read.csv(here_koco_results("r5_cum_sp_w.csv"))
+sp_w_r1 <- read.csv(here_prev_results("r1_sp_w.csv"))
+si_w_r2 <- read.csv(here_prev_results("r2_cum_sp_w.csv"))
+si_w_r3 <- read.csv(here_prev_results("r3_cum_sp_w.csv"))
+si_w_r4 <- read.csv(here_prev_results("r4_cum_sp_w.csv"))
+si_w_r5 <- read.csv(here_prev_results("r5_cum_sp_w.csv"))
 
 
 
@@ -490,11 +489,11 @@ g_vax <- ggplot(dat_vax, aes(x = date, y = Value, col = Calculation, shape = Cal
 ###
 
 # Weighted
-sp_w_r1 <- read.csv(here_koco_results("r1_sp_w.csv"))
-sp_w_r2 <- read.csv(here_koco_results("r2_cum_sp_w.csv"))
-sp_w_r3 <- read.csv(here_koco_results("r3_cum_sp_w.csv"))
-sp_w_r4 <- read.csv(here_koco_results("r4_cum_sp_w.csv"))
-sp_w_r5 <- read.csv(here_koco_results("r5_cum_sp_w.csv"))
+sp_w_r1 <- read.csv(here_prev_results("r1_sp_w.csv"))
+sp_w_r2 <- read.csv(here_prev_results("r2_cum_sp_w.csv"))
+sp_w_r3 <- read.csv(here_prev_results("r3_cum_sp_w.csv"))
+sp_w_r4 <- read.csv(here_prev_results("r4_cum_sp_w.csv"))
+sp_w_r5 <- read.csv(here_prev_results("r5_cum_sp_w.csv"))
 
 # % of the population vaccinated
 
@@ -588,7 +587,7 @@ g <- ggplot(res[!(res$Round %in% c("Round 1", "Round 2")), ], aes(x = Round, y =
   geom_vline(xintercept = c(1.5, 2.5))
 
 # Add gap and %
-source(here_koco_scripts("my_gggap.R"))
+source(here_prev_scripts("my_gggap.R"))
 g_prev_inf_vax <- my_gg.gap(plot=g,
           segments=c(0.3,0.55),
           ylim=c(0,0.85),
@@ -614,10 +613,10 @@ legend_cd <- plot_grid(get_legend(g_prev_vax), get_legend(g_bti))
 g_cd <- plot_grid(p_cd, legend_cd, ncol = 1, rel_heights = c(1.1, .15))
 
 
-ggsave2(plot = g_prev_inf_vax, filename = here_koco_figures("plot_F.pdf"), width = 6, height = 3.5)
+ggsave2(plot = g_prev_inf_vax, filename = here_prev_figures("plot_F.pdf"), width = 6, height = 3.5)
 
 
-p_f <- cowplot::ggdraw() + cowplot::draw_image(magick::image_read_pdf(here_koco_figures("plot_F.pdf")), 
+p_f <- cowplot::ggdraw() + cowplot::draw_image(magick::image_read_pdf(here_prev_figures("plot_F.pdf")), 
                                                clip = "on", scale = 1.25)
 
 p_ef <- plot_grid(g_vax + theme(legend.position="none"), p_f,
@@ -632,5 +631,5 @@ g_ef <- plot_grid(p_ef, l_ef, ncol = 1, rel_heights = c(1.1, .15))
 g_fin <- plot_grid(g_ab, g_cd, g_ef, ncol = 1)
 
 
-ggsave(here_koco_figures("Prevalence_incidence_final.png"), plot = g_fin, width = 30, height = 25, units = "cm")
+ggsave(here_prev_figures("Prevalence_incidence_final.png"), plot = g_fin, width = 30, height = 25, units = "cm")
 

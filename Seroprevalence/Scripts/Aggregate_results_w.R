@@ -2,11 +2,12 @@
 #' The variance due to the multiple imputation procedure is added to the sampling uncertainty.
 
 aggregate_res_w <- function(seeds = 1:100, r = NULL, cal_vax = NULL){
-  
-  # rm(list = ls())
-  
-  here_koco_scripts = function (...) here::here("Scripts", ...)
-  here_koco_results = function (...) here::here("Results", ...)
+
+  here_koco_data = function (...) here::here("Data", ...)
+  here_koco_prev = function (...) here::here("Seroprevalence", ...)
+  here_prev_figures = function (...) here_koco_prev("Figures", ...)
+  here_prev_results = function (...) here_koco_prev("Results", ...)
+  here_prev_scripts = function (...) here_koco_prev("Scripts", ...)
   
     
   # Number of iterations
@@ -21,9 +22,9 @@ aggregate_res_w <- function(seeds = 1:100, r = NULL, cal_vax = NULL){
   
   for(i in seeds){
     if (cal_vax == TRUE){
-      res[[i]] <- read.csv(paste0(here_koco_results(paste0("R", r)), "/r", r, "_cum_sp_w_seed", i,".csv"))
+      res[[i]] <- read.csv(paste0(here_prev_results(paste0("R", r)), "/r", r, "_cum_sp_w_seed", i,".csv"))
     } else {
-      res[[i]] <- read.csv(paste0(here_koco_results(paste0("R", r)), "/r", r, "_cum_sp_w_no_cal_seed", i,".csv"))
+      res[[i]] <- read.csv(paste0(here_prev_results(paste0("R", r)), "/r", r, "_cum_sp_w_no_cal_seed", i,".csv"))
     }
     
   }
@@ -54,9 +55,9 @@ aggregate_res_w <- function(seeds = 1:100, r = NULL, cal_vax = NULL){
   
   # Save results
   if (cal_vax == TRUE){
-    write.csv(res.fin, here_koco_results(paste0("r", r, "_cum_sp_w.csv")), row.names = FALSE)
+    write.csv(res.fin, here_prev_results(paste0("r", r, "_cum_sp_w.csv")), row.names = FALSE)
   } else {
-    write.csv(res.fin, here_koco_results(paste0("r", r, "_cum_sp_w_no_cal.csv")), row.names = FALSE)
+    write.csv(res.fin, here_prev_results(paste0("r", r, "_cum_sp_w_no_cal.csv")), row.names = FALSE)
   }
   
 }

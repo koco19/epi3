@@ -3,9 +3,32 @@
 
 rm(list = ls())
 
+if (!require("pacman")) install.packages("pacman")
+library(pacman)
+
+p_load(Amelia)
+p_load(descr)
+p_load(reshape2)
+p_load(sampling)
+p_load(lubridate)
+p_load(tidyverse)
+p_load(data.table)
+p_load(ggplot2)
+p_load(ggpattern)
+p_load(gg.gap)
+p_load(cowplot)
+p_load(pdftools)
+p_load(ggrepel)
+p_load(scales)
+p_load(car)
+p_load(openxlsx)
+p_load(naniar)
+p_load(mice)
+
 
 here_koco_data = function (...) here::here("Data", ...)
-here_koco_results = function (...) here::here("Results", ...)
+here_koco_nr = function (...) here::here("NonResponse", ...)
+here_nr_results = function (...) here_koco_nr("Results", ...)
 
 
 ########
@@ -595,5 +618,5 @@ res.coef$R5 <- coef_r5
 # Export all #
 ##############
 
-write.xlsx(res.coef, file = here_koco_results("NR_mechanism_NA.xlsx"), overwrite = TRUE)
+write.xlsx(res.coef, file = here_nr_results("NR_mechanism_NA.xlsx"), overwrite = TRUE)
 
