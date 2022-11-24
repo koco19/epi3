@@ -1,26 +1,15 @@
-# KoCo19 Epidemiological Analysis
+# Data
 
-Code for the statistical epidemiological analysis of the prospective Covid-19 cohort study in Munich KoCo19. The study website is http://koco19.de, see there for further information. 
+Data used for the statistical epidemiological analysis of the prospective Covid-19 cohort study in Munich KoCo19. 
 
 ## Structure
 
-The code is located in the following folders:
+The folder `/Multiple_Imputation` contains the following data:
 
-* `/Cluster`: Contains the clustering analyses via permutation tests.
-* `/Data`: Contains the data on the cohort, the datasets with imputed vaccinaton status for the seroprevalence estimates, the results of the multiple imputation for the non-response and risk factors analyses and some information on the Munich structure for the computation of the sampling weights and the calibration of these weights.
-* `/DescriptiveStatistics`: Contains descriptive statistics on the cohort.
-* `/NonResponse`: Contains the non-response analyses.
-* `/RiskFactors`: Contains the risk factor analyses.
-* `/Seroprevalence`: Contains the analyses to compute the seroprevalence estimates.
+* `Results_mi.RDS`: Results of the multiple imputation procedure used for the non-response analysis and the risk factor analysis. These data are obtained from the R script `NonResponse/Scripts/NR_mechanism_MI.R`.
 
-Further:
-
-* `/Icons`: Contains a few icons used for visualization.
-
-## Data
-
-For data protection reasons, the data are not publicly available.
 
 ## Contact
 
-For specific questions, please contact the responsibles indicated in the respective sub-modules.
+Ronan Le Gleut
+
