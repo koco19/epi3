@@ -1,15 +1,14 @@
-# Seroprevalence analyses
+# Non-response analyses
 
-Codes for the analyses to compute the seroprevalence estimates. 
+Codes for the non-response analyses. 
 
 ## Structure
 
-The code is located in the following folders:
+The folder `/Figures` contains the follwing files:
 
-* `/Figures`: Contains the figures included in the paper related to the seroprevalence analyses.
-* `/Results`: Contains the tables with the seroprevalence estimates for the different rounds according to different scenarii.
-* `/Scripts`: Contains the R scripts to compute the seroprevalence estimates and produce the figures.
+* `NR.png`: Figure included in the manuscript showing the missing pattern in the data. This plot is produced by the R script `NonResponse/Scripts/NR_mechanism_MI.R`.
 
 ## Contact
 
 Ronan Le Gleut
+
