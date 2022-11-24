@@ -4,12 +4,13 @@ Codes for the analyses to compute the seroprevalence estimates.
 
 ## Structure
 
-The code is located in the following folders:
+The folder `/Results/R5` contains the following files:
 
-* `/Figures`: Contains the figures included in the paper related to the seroprevalence analyses.
-* `/Results`: Contains the tables with the seroprevalence estimates for the different rounds according to different scenarii.
-* `/Scripts`: Contains the R scripts to compute the seroprevalence estimates and produce the figures.
+* `r5_cum_sp_w_seedx.csv`: Weighted seroprevalence estimates for round 5 calibrated on the vaccintation status using different imputed datasets (seeds x) produced by `/Seroprevalence/Scripts/Imputation.R`. These CSV files, obtained from `R5_Cumulative_Seroprevalence.R`, are not available.
+* `r5_cum_sp_w_no_cal_seedx.csv`: Weighted seroprevalence estimates for round 5 not calibrated on the vaccintation status using different imputed datasets (seeds x) produced by `/Seroprevalence/Scripts/Imputation.R`. These CSV files, obtained from `R5_Cumulative_Seroprevalence_no_cal.R`, are not available. 
+
 
 ## Contact
 
 Ronan Le Gleut
+
