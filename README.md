@@ -6,14 +6,12 @@ Code for the statistical epidemiological analysis of the prospective Covid-19 co
 
 The code is located in the following folders:
 
-* `/Data`: 
-* `/Figures`: 
-
-* `/Statistics`: Contains the code for estimating the unweighted point estimates and associated confidence intervals for overall and weekly prevalences.
-* `/Output`: Contains the results for the unweighted prevalence estimates.
-* `/SamplingWeights`: Contains the code for performing sampling weight
-  correction and calibration. Contains also weighted prevalence and incidence estimates along with confidence intervals.
-* `/PermutationStudies`: Contains clustering analyses via permutation tests.
+* `/Cluster`: Contains the clustering analyses via permutation tests.
+* `/Data`: Contains the data on the cohort, the datasets with imputed vaccinaton status for the seroprevalence estimates, the results of the multiple imputation for the non-response and risk factors analyses and some information on the Munich structure for the computation of the sampling weights and the calibration of these weights.
+* `/DescriptiveStatistics`: Contains descriptive statistics on the cohort.
+* `/NonResponse`: Contains the non-response analyses.
+* `/RiskFactors`: Contains the risk factor analyses.
+* `/Seroprevalence`: Contains the analyses to compute the seroprevalence estimates.
 
 Further:
 
