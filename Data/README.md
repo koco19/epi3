@@ -1,26 +1,19 @@
-# KoCo19 Epidemiological Analysis
+# Data
 
-Code for the statistical epidemiological analysis of the prospective Covid-19 cohort study in Munich KoCo19. The study website is http://koco19.de, see there for further information. 
+This folder contains the different datasets used for the statistical epidemiological analysis of the prospective Covid-19 cohort study in Munich KoCo19. 
 
 ## Structure
 
-The code is located in the following folders:
+The data are organized as follow:
 
-* `/Cluster`: Contains the clustering analyses via permutation tests.
-* `/Data`: Contains the data on the cohort, the datasets with imputed vaccinaton status for the seroprevalence estimates, the results of the multiple imputation for the non-response and risk factors analyses and some information on the Munich structure for the computation of the sampling weights and the calibration of these weights.
-* `/DescriptiveStatistics`: Contains descriptive statistics on the cohort.
-* `/NonResponse`: Contains the non-response analyses.
-* `/RiskFactors`: Contains the risk factor analyses.
-* `/Seroprevalence`: Contains the analyses to compute the seroprevalence estimates.
-
-Further:
-
-* `/Icons`: Contains a few icons used for visualization.
-
-## Data
-
-For data protection reasons, the data are not publicly available.
+* `/Imputed_Data`: Contains the datasets with imputed vaccinaton status and serological status for the calculation of the seroprevalence estimates.
+* `/Multiple_Imputation`: Contains the results of the multiple imputation procedure used for the analysis of the non-response mechanism and for the risk factor analysis.
+* `/R1`: Contains data for the cohort and for the Munich population at baseline.
+* `/R2`: Contains data for the Munich population at round 2.
+* `/R3`: Contains data for the Munich population at round 3.
+* `/R4`: Contains data for the Munich population at round 4.
+* `/R5`: Contains data for the cohort for all rounds (1 to 5) and for the Munich population at round 5.
 
 ## Contact
 
-For specific questions, please contact the responsibles indicated in the respective sub-modules.
+Ronan Le Gleut, Noemi Castelletti
