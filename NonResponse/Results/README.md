@@ -1,14 +1,13 @@
-# Seroprevalence analyses
+# Non-response analyses
 
-Codes for the analyses to compute the seroprevalence estimates. 
+Codes for the non-response analyses. 
 
 ## Structure
 
-The code is located in the following folders:
+The folder `/Scripts` contains the follwing files:
 
-* `/Figures`: Contains the figures included in the paper related to the seroprevalence analyses.
-* `/Results`: Contains the tables with the seroprevalence estimates for the different rounds according to different scenarii.
-* `/Scripts`: Contains the R scripts to compute the seroprevalence estimates and produce the figures.
+* `NR_mechanism_MI.xlsx`: Results of the study of the NR mechanism using multiple imputation. This table is created from the R script `NonResponse/Scripts/NR_mechanism_MI.R`.
+* `NR_mechanism_NA.xlsx`: Results of the study of the NR mechanism using complete cases and an indicator variable for missingness for the income. This table is created from the R script `NonResponse/Scripts/NR_mechanism_NA.R`.
 
 ## Contact
 
