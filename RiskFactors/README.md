@@ -1,28 +1,15 @@
-# KoCo19 Epidemiological Analysis
+# Risk factors analyses
 
-Code for the statistical epidemiological analysis of the prospective Covid-19 cohort study in Munich KoCo19. The study website is http://koco19.de, see there for further information. 
+Codes for the risk factors analyses. 
 
 ## Structure
 
 The code is located in the following folders:
 
-* `/Data`: 
-* `/Figures`: 
-
-* `/Statistics`: Contains the code for estimating the unweighted point estimates and associated confidence intervals for overall and weekly prevalences.
-* `/Output`: Contains the results for the unweighted prevalence estimates.
-* `/SamplingWeights`: Contains the code for performing sampling weight
-  correction and calibration. Contains also weighted prevalence and incidence estimates along with confidence intervals.
-* `/PermutationStudies`: Contains clustering analyses via permutation tests.
-
-Further:
-
-* `/Icons`: Contains a few icons used for visualization.
-
-## Data
-
-For data protection reasons, the data are not publicly available.
+* `/Figures`: Contains the figures included in the paper related to the risk factors analyses.
+* `/Results`: Contains the tables related to the analyses of the risk factors.
+* `/Scripts`: Contains the R scripts to analyze the risk factors.
 
 ## Contact
 
-For specific questions, please contact the responsibles indicated in the respective sub-modules.
+Noemi Castelletti
