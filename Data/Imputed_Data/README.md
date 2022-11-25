@@ -1,6 +1,6 @@
 # Data
 
-Data used for the statistical epidemiological analysis of the prospective Covid-19 cohort study in Munich KoCo19. 
+Data used for the statistical epidemiological analysis of the prospective Covid-19 cohort study in Munich KoCo19. For data protection reasons, the data are not publicly available.
 
 ## Structure
 
