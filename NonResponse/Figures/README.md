@@ -6,7 +6,7 @@ Codes for the non-response analyses.
 
 The folder `/Figures` contains the follwing files:
 
-* `NR.png`: Figure included in the manuscript showing the missing pattern in the data. This plot is produced by the R script `NonResponse/Scripts/NR_mechanism_MI.R`.
+* `Figure_S1.png`; `Figure_S1.pdf`: Figure included in the manuscript showing the missing pattern in the data. This plot is produced by the R script `NonResponse/Scripts/NR_mechanism_MI.R`.
 
 ## Contact
 
