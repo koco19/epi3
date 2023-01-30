@@ -337,12 +337,16 @@ KoCo_plot <- KoCo19
 
 names(KoCo_plot)[names(KoCo_plot) %in% list_var] <- list_var_plot
 
-
 ### Missing pattern
-png(here_nr_figures("NR.png"), width = 1500, height = 1000, res = 190)
-# gg_miss_upset(KoCo19[, list_var], nsets = 20, text.scale = 0.8)
+png(here_nr_figures("Figure_S1.png"), width = 170, height = 150,
+    units = "mm", res = 300)
 gg_miss_upset(KoCo_plot[, list_var_plot], nsets = 20, text.scale = 0.9)
 dev.off()
+
+pdf(here_nr_figures("Figure_S1.pdf"), width = 6.69, height = 5.8)
+gg_miss_upset(KoCo_plot[, list_var_plot], nsets = 20, text.scale = 0.9)
+dev.off()
+
 
 # A lot of missing values for income only. 
 # Quite a lot also missing for both income and living area and household type.

@@ -18,7 +18,7 @@ Date <- seq(as.Date("2020-02-01"), as.Date("2021-11-01"), by = "1 month")
 Labels <- rep("", length(Date))
 Labels[Date %in% as.Date(c("2020-02-01", "2020-05-01", "2020-12-01", "2021-03-01", "2021-08-01", "2021-11-01"))] <- 
   paste(c("Feb 2020", "May 2020", "Dec 2020", "Mar 2021", "Aug 2021", "Nov 2021"), "\n",
-        c("", "Round 1", "Round 2", "Round 3", "Round 4", "Round 5"), "\n",
+        c("", "Baseline", "Follow-up 1", "Follow-up 2", "Follow-up 3", "Follow-up 4"), "\n",
         c("", paste0("(n=", n_ind, ")")), sep = "")
 
 # Adjust size legend
@@ -122,7 +122,7 @@ g_prev_inf <- ggplot(res, aes(x = date, y = estimate, group = Prevalence)) +
         axis.title.x = element_blank(),
         axis.title.y = element_text(size = 11), 
         axis.text.y=element_text(size=10),
-        axis.text.x=element_text(size=9),
+        axis.text.x=element_text(size=8),
         legend.text = element_text(size=10),
         legend.title = element_blank(),
         # legend.title = element_text(size=15),
@@ -216,7 +216,7 @@ g_inc_inf <- ggplot(res, aes(x = date, y = estimate, group = Incidence)) +
         axis.title.x = element_blank(),
         axis.title.y = element_text(size = 11), 
         axis.text.y=element_text(size=10),
-        axis.text.x=element_text(size=9),
+        axis.text.x=element_text(size=8),
         legend.text = element_text(size=10),
         legend.title = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -306,7 +306,7 @@ g_prev_vax <- ggplot(res, aes(x = date, y = estimate, group = Calculation)) +
         axis.title.x = element_blank(),
         axis.title.y = element_text(size = 11), 
         axis.text.y=element_text(size=10),
-        axis.text.x=element_text(size=9),
+        axis.text.x=element_text(size=8),
         legend.text = element_text(size=10),
         legend.title = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -394,7 +394,7 @@ g_bti <- ggplot(res, aes(x = date, y = estimate, group = Calculation)) +
         axis.title.x = element_blank(),
         axis.title.y = element_text(size = 11), 
         axis.text.y=element_text(size=10),
-        axis.text.x=element_text(size=9),
+        axis.text.x=element_text(size=8),
         legend.text = element_text(size=10),
         legend.title = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -441,7 +441,7 @@ dat_vax$date = rep(seq(as.Date("2021-03-01"), as.Date("2021-11-01"), by = "1 mon
 Labels <- format(dat_vax$date, "%b %Y")
 Labels[dat_vax$date %in% as.Date(c("2021-03-01", "2021-08-01", "2021-11-01"))] <- 
   paste(Labels[dat_vax$date %in% as.Date(c("2021-03-01", "2021-08-01", "2021-11-01"))], "\n", 
-        c("Round 3", "Round 4", "Round 5"))
+        c("Follow-up 2", "Follow-up 3", "Follow-up 4"))
   
 Labels <- Labels[1:(length(Labels)/2)]
 
@@ -463,7 +463,7 @@ g_vax <- ggplot(dat_vax, aes(x = date, y = Value, col = Calculation, shape = Cal
   geom_line(aes(linetype = Calculation), col = col[2], size = 1) + 
   geom_point(aes(shape = Calculation), col = col[2], size = 2, key_glyph = large_points) +
   theme_classic() + 
-  scale_y_continuous(name = "Prevalence vaccination (%)  ", labels = scales::percent_format(accuracy = 1), # trans = "reverse",
+  scale_y_continuous(name = "Prevalence vaccination (%)   ", labels = scales::percent_format(accuracy = 1), # trans = "reverse",
                                           sec.axis = sec_axis(~./4, name = "Incidence vaccination (%)", labels = scales::percent_format(accuracy = 1))) +
   scale_x_date(labels = Labels,
                breaks = dat_vax$date[dat_vax$Calculation == "Incidence"]) +
@@ -471,7 +471,7 @@ g_vax <- ggplot(dat_vax, aes(x = date, y = Value, col = Calculation, shape = Cal
         axis.title.x = element_blank(),
         axis.title.y = element_text(size = 11), 
         axis.text.y=element_text(size=10),
-        axis.text.x=element_text(size=9, angle = 45, vjust = 1, hjust = 1),
+        axis.text.x=element_text(size=8, angle = 45, vjust = 1, hjust = 1),
         legend.text = element_text(size=10),
         legend.title = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -558,7 +558,7 @@ res <- res[order(res$Round, res$group), ]
 ###
 
 
-Labels <- c("Mar 2021\nRound 3\n(n=4382)", "Aug 2021\nRound 4\n(n=3971)", "Nov 2021\nRound 5\n(n=3838)")
+Labels <- c("Mar 2021\nFollow-up 2\n(n=4382)", "Aug 2021\nFollow-up 3\n(n=3971)", "Nov 2021\nFollow-up 4\n(n=3838)")
 
 
 g <- ggplot(res[!(res$Round %in% c("Round 1", "Round 2")), ], aes(x = Round, y = estimate, fill = group, pattern = group)) +
@@ -576,7 +576,7 @@ g <- ggplot(res[!(res$Round %in% c("Round 1", "Round 2")), ], aes(x = Round, y =
         axis.title.x = element_blank(),
         axis.title.y = element_text(size = 11),
         axis.text.y=element_text(size=10),
-        axis.text.x=element_text(size=9),
+        axis.text.x=element_text(size=8),
         legend.text = element_text(size=10),
         legend.title = element_blank(), 
         legend.key = element_blank(),
@@ -631,5 +631,10 @@ g_ef <- plot_grid(p_ef, l_ef, ncol = 1, rel_heights = c(1.1, .15))
 g_fin <- plot_grid(g_ab, g_cd, g_ef, ncol = 1)
 
 
-ggsave(here_prev_figures("Prevalence_incidence_final.png"), plot = g_fin, width = 30, height = 25, units = "cm")
+ggsave(here_prev_figures("Figure_4.png"), plot = g_fin, width = 30, height = 25, units = "cm")
+
+ggsave(here_prev_figures("Figure_4.pdf"), plot = g_fin, width = 30, height = 25, units = "cm")
+
+# ggsave(here_prev_figures("Figure_4.pdf"), plot = g_fin, width = 17, height = 15, units = "cm")
+
 
