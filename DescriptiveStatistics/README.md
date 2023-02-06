@@ -8,7 +8,7 @@ In the file `code_figure_1.Rmd` the code used to produce Figure 1 is contained.
 The code uses three different datasets:
 - Dataset 1.	The number of new SARS-CoV-2 cases reported from the city municipality of Munich (results_nowcast_2022-10-20),
 - Dataset 2.	The cleaned and locked dataset for this analysis (R5_CompleteData_NC.RDS), and
-- Dataset 3.	The dataset containing all rounds of KoCo19, including participants that were recruited for KoCo19 but were excluded (Database_KoCo_all_studies.RDS). 
+- Dataset 3.	The dataset containing all rounds of KoCo19, including participants that were recruited for KoCo19 but were excluded (Database_KoCo_all_studies.RDS).
 Dataset 3 is needed to catch the variables containing the time when the sample was either taken or arrived our institute. In chunk 5 we select those variables and only the samples until Follow-up 5 of the KoCo19 participants.
 In chunk 7 we select the new cases inly until March 1st, 2022.
 In chuck 8 we create a table indicating how many samples came back on each day.
