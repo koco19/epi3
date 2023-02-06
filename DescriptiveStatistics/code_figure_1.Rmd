@@ -1,0 +1,134 @@
+---
+title: "Plot cases-samples KoCo-19, publication round 5"
+author: "Noemi Castelletti"
+date: "`r Sys.Date()`"
+params:
+  cases_stadt_muenchen: C:/Users/Noemi Castelletti/Desktop/koco19-data-mgmt/R/Analyse_n/KoCo19_Epi/Figure_cases_samples/
+  data_samples: C:/Users/Noemi Castelletti/Desktop/koco19-data-mgmt/R/Analyse_n/Pipeline_old/
+  data_ids_needed: C:/Users/Noemi Castelletti/Desktop/koco19-data-mgmt/R/Analyse_n/KoCo19_Epi/
+---
+
+## R packages
+install and load packages
+```{r}
+if (!require("pacman")) install.packages("pacman")
+library(pacman)
+p_load(tidyverse,
+       lubridate,
+       janitor,
+       tidytext,
+       openxlsx,
+       DBI,
+       fs,
+       RSQLite,
+       rvest,
+       glue,
+       readxl,
+       dplyr,
+       knitr,
+       patchwork,
+       xlsx,
+       plyr,
+       ggpubr
+       )
+```
+
+```{r}
+ggplot2::theme_set(ggplot2::theme_bw())
+```
+
+```{r}
+path_data_ids_needed <- params$data_ids_needed
+data_ids_needed <- readRDS(file.path(path_data_ids_needed, "R5_CompleteData_NC.RDS"))
+```
+
+```{r}
+path_data_rounds <- params$data_samples
+data_rounds <- readRDS(file.path(path_data_rounds, "Database_KoCo_all_studies.RDS"))
+```
+
+```{r}
+data_rounds %>% 
+  filter(BewohnerId %in% data_ids_needed$ind_id) %>% 
+  mutate(sample_date = coalesce(Q1_b_Datum_Besuch, date_prick_self,
+                                date_entry_TROPI) ) %>% 
+  select(BewohnerId, sample_date, LabId, KoCo19_round) %>% 
+  filter(sample_date < "2022-03-01") %>% 
+  filter(sample_date < "2020-07-01" | sample_date > "2020-10-01") -> data_rounds_needed
+```
+
+
+```{r}
+path_data_cases <- params$cases_stadt_muenchen
+data_cases <- read.csv2(file.path(path_data_cases, "results_nowcast_2022-10-20.csv"), sep = ",")
+```
+
+```{r}
+data_cases %>% 
+  mutate(date = as.Date(date)) %>% 
+  filter(date < "2022-03-01") %>% 
+  select(date, reported) -> data_cases_final
+```
+
+```{r}
+table_samples_back <- as.data.frame(table(data_rounds_needed$sample_date, exclude = F))
+table_samples_back$Var1 <- as.Date(table_samples_back$Var1)
+```
+
+
+
+```{r}
+data_cases_final %>% 
+  full_join(table_samples_back, by = c("date" = "Var1")) %>% 
+  mutate(`calendar week` = strftime(date, format = "%V")) -> final_data
+```
+
+```{r}
+Sys.setlocale("LC_TIME", "English")
+```
+
+```{r}
+final_data %>%
+  mutate(year = substr(date,1,4),
+         `year calendar week` = paste0(year, ", week ", `calendar week`)) %>% 
+  select(-c(date)) %>% 
+  dplyr::group_by(`year calendar week`) %>% 
+  dplyr::summarise(reported = sum(reported, na.rm = T),
+            Freq = sum(Freq, na.rm = T)) -> data_week
+```
+
+
+```{r}
+final_data %>%
+  mutate(year = substr(date,1,4),
+         `year calendar week` = paste0(year, ", week ", `calendar week`)) %>% 
+  group_by(`year calendar week`) %>% 
+  arrange(date) %>% 
+  slice(1) %>% 
+  select(date, `year calendar week`) %>% 
+  full_join(data_week) -> data_week_date
+```
+```{r}
+data_week_date %>% 
+  filter(date != "2021-01-01",
+         date != "2022-01-01") %>% 
+  ggplot(aes(x=as.Date(date), y=reported)) +
+  geom_col(fill = "black", alpha=0.5, width = 7) +
+  geom_col(aes(y=Freq*2.5), fill="royalblue3", alpha = 0.8, width = 7) +
+  scale_y_continuous("New daily cases", sec.axis = sec_axis(~ ./2.5, name = "Number of samples")) +
+  scale_x_date(date_breaks = "3 month", date_labels = "%b %Y", minor_breaks = "1 month") +
+  coord_cartesian(ylim = c(0, 6500)) +
+  theme(axis.title=element_text(size=25), axis.text = element_text(size=20),
+        axis.line.y.right = element_line(color = "royalblue3"),
+        axis.ticks.y.right = element_line(color = "royalblue3"),
+        axis.title.y.right = element_text(color = "royalblue3",
+                                          margin = margin(t = 0, r = 0, b = 0, l = 10)),
+        axis.text.y.right = element_text(color = "royalblue3")) +
+  xlab("")
+```
+```{r echo=FALSE, message=FALSE}
+setwd(path_data_ids_needed)
+ggsave("plot_cases_sampling_week.png",height=9,width = 15, units="in",dpi=720)
+ggsave("plot_cases_sampling_week.jpeg",height=9,width = 15, units="in",dpi=720)
+ggsave("plot_cases_sampling_week.pdf",height=9,width = 15, units="in",dpi=720)
+```

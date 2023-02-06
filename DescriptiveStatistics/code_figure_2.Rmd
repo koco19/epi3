@@ -1,0 +1,292 @@
+---
+title: "Sankey plot KoCo19, round5"
+output:
+  pdf_document: default
+  
+params:
+  path_data_rounds: C:/Users/Noemi Castelletti/Desktop/koco19-data-mgmt/R/Analyse_n/KoCo19_Epi/
+---
+
+
+```{r include=FALSE}
+if (!require("pacman")) install.packages("pacman")
+library(pacman)
+p_load(ggplot2,
+       dplyr,
+       ggsankey,
+       tidyverse,
+       ggmice,
+       finalfit,
+       patchwork)
+```
+
+```{r}
+path_data_rounds <- params$path_data_rounds
+data_rounds <- read.csv(file.path(path_data_rounds, "R5_CompleteData_NC.csv"))
+```
+
+```{r}
+data_rounds %>% 
+  select(R1_Result, R2_Result, R3_Result, R3_Result_S1,
+         R4_Result, R4_Result_S1, R5_Result, R5_Result_S1,
+         R3_Vac, R4_Vac, R5_Vac) -> data_sankey
+```
+
+
+## Ever positive definition, simplified
+```{r}
+data_sankey %>% 
+  mutate(
+
+## R1 done
+    R1_result_words = case_when(
+      R1_Result == "Positive" ~ "Only infected",
+      R1_Result == "Negative" ~ "Naïve",
+      TRUE ~ "missing"),
+
+## R2 done
+    R2_Result_words = case_when(
+      R1_result_words == "Only infected" ~ "Only infected",
+      is.na(R2_Result) == T ~ "Missing",
+    R2_Result == "Positive" ~ "Only infected",
+    R2_Result == "Negative" ~ "Naïve",
+    TRUE ~ "to do"),
+
+## R3 done
+    R3_Result_words = case_when(
+      R2_Result_words == "Only infected" &
+        R3_Vac == "Not Registered" ~ "Only infected",
+      R2_Result_words == "Only infected" &
+        R3_Vac == "Registered" ~ "Only infected",
+      R2_Result_words == "Only infected" &
+        R3_Vac == "Unknown" ~ "Infected,\nundefined vaccination",
+      R2_Result_words == "Only infected" &
+        R3_Vac == "Vaccinated Atleast Once" ~ "Infected & vaccinated",
+      
+      
+      
+      R2_Result_words == "Missing" & 
+        is.na(R3_Result) == T &
+        is.na(R3_Result_S1) == T ~ "Missing",
+      is.na(R3_Result) == T |
+        is.na(R3_Result_S1) == T ~ "Missing",
+      R3_Result == "Negative" & R3_Result_S1 == "Negative" ~ "Naïve",
+      R3_Result == "Negative" & R3_Result_S1 == "Positive" ~ "Vaccinated",
+      R3_Result == "Positive" & 
+      R3_Result_S1 == "Negative" ~ "Only infected",
+      
+      R3_Result == "Positive" & R3_Result_S1 == "Positive" &
+        R3_Vac == "Not Registered" ~ "Only infected",
+      R3_Result == "Positive" & R3_Result_S1 == "Positive" &
+        R3_Vac == "Registered" ~ "Only infected",
+      R3_Result == "Positive" & R3_Result_S1 == "Positive" &
+        R3_Vac == "Unknown" ~ "Infected,\nundefined vaccination",
+      R3_Result == "Positive" & R3_Result_S1 == "Positive" &
+        R3_Vac == "Vaccinated Atleast Once" ~ "Infected & vaccinated",
+      R3_Result == "Positive" & R3_Result_S1 == "Positive" &
+        is.na(R3_Vac) == T ~ "Infected,\nundefined vaccination",
+      TRUE ~ "to define"),
+    
+## R4 done
+    R4_Result_words = case_when(
+      R3_Result_words == "Only infected" &
+        R4_Vac == "Not Vaccinated" ~ "Only infected",
+      R3_Result_words == "Only infected" &
+        R4_Vac == "Unknown" ~ "Infected,\nundefined vaccination",
+      R3_Result_words == "Only infected" &
+        R4_Vac == "Vaccinated Once" ~ "Infected & vaccinated",
+      R3_Result_words == "Only infected" &
+        R4_Vac == "Vaccinated Twice" ~ "Infected & vaccinated",
+      
+      R3_Result_words == "Infected & vaccinated" ~ "Infected & vaccinated",
+      
+      R3_Result_words == "Vaccinated" & R4_Result == "Negative" ~ "Vaccinated",
+      R3_Result_words == "Vaccinated" & 
+        R4_Result == "Positive" ~ "Infected & vaccinated",
+      R3_Result_words == "Vaccinated" & 
+        is.na(R4_Result) ~ "Vaccinated",
+      
+      R3_Result_words == "Infected,\nundefined vaccination" & 
+        R4_Vac == "Not Vaccinated" ~ "Only infected",
+      R3_Result_words == "Infected,\nundefined vaccination" & 
+        R4_Vac == "Unknown" ~ "Infected,\nundefined vaccination",
+      R3_Result_words == "Infected,\nundefined vaccination" & 
+        R4_Vac == "Vaccinated Once" ~ "Infected & vaccinated",
+      R3_Result_words == "Infected,\nundefined vaccination" & 
+        R4_Vac == "Vaccinated Twice" ~ "Infected & vaccinated",
+
+      R3_Result_words == "Missing" & 
+        is.na(R4_Result) == T &
+        is.na(R4_Result_S1) == T ~ "Missing",
+      R3_Result_words == "Missing" & 
+        is.na(R4_Result) == T &
+        is.na(R4_Result_S1) == T ~ "Missing",
+      is.na(R4_Result) == T |
+        is.na(R4_Result_S1) == T ~ "Missing",
+      R4_Result == "Negative" & R4_Result_S1 == "Negative" ~ "Naïve",
+      R4_Result == "Negative" & R4_Result_S1 == "Positive" ~ "Vaccinated",
+      R4_Result == "Positive" & 
+      R4_Result_S1 == "Negative" ~ "Only infected",
+      
+      R4_Result == "Positive" & R4_Result_S1 == "Positive" &
+        R4_Vac == "Not Vaccinated" ~ "Only infected",
+      R4_Result == "Positive" & R4_Result_S1 == "Positive" &
+        R4_Vac == "Unknown" ~ "Infected,\nundefined vaccination",
+      R4_Result == "Positive" & R4_Result_S1 == "Positive" &
+        R4_Vac == "Vaccinated Once" ~ "Infected & vaccinated",
+      R4_Result == "Positive" & R4_Result_S1 == "Positive" &
+        R4_Vac == "Vaccinated Twice" ~ "Infected & vaccinated",
+      R4_Result == "Positive" & R4_Result_S1 == "Positive" &
+        is.na(R4_Vac) == T ~ "Infected,\nundefined vaccination",
+      TRUE ~ "to define"),
+
+
+## R5
+    R5_Result_words = case_when(
+      
+      R4_Result_words == "Only infected" &
+        R5_Vac == "No" ~ "Only infected",
+      R4_Result_words == "Only infected" &
+        is.na(R5_Vac) == T ~ "Infected,\nundefined vaccination",
+      R4_Result_words == "Only infected" &
+        R5_Vac == "Yes" ~ "Infected & vaccinated",
+      
+      R4_Result_words == "Infected & vaccinated" ~ "Infected & vaccinated", 
+      
+      R4_Result_words == "Vaccinated,\nundefined infection" &
+        R5_Result == "Positive" ~ "Infected & vaccinated",
+      R4_Result_words == "Vaccinated,\nundefined infection" &
+        R5_Result == "Negative" ~ "Vaccinated",
+      R4_Result_words == "Vaccinated,\nundefined infection" &
+        is.na(R5_Result) == T ~ "Vaccinated",
+      
+      R4_Result_words == "Vaccinated" & R5_Result == "Negative" ~ "Vaccinated",
+      R4_Result_words == "Vaccinated" & 
+        R5_Result == "Positive" ~ "Infected & vaccinated",
+      R4_Result_words == "Vaccinated" & 
+        is.na(R5_Result) ~ "Vaccinated",
+      
+      R4_Result_words == "Infected,\nundefined vaccination" & 
+        R5_Vac == "No" ~ "Only infected",
+      R4_Result_words == "Infected,\nundefined vaccination" & 
+        is.na(R5_Vac) == T ~ "Infected,\nundefined vaccination",
+      R4_Result_words == "Infected,\nundefined vaccination" & 
+        R5_Vac == "Yes" ~ "Infected & vaccinated",
+
+      R4_Result_words == "Missing" & 
+        is.na(R5_Result) == T &
+        is.na(R5_Result_S1) == T ~ "Missing",
+      R4_Result_words == "Missing" & 
+        is.na(R5_Result) == T &
+        is.na(R5_Result_S1) == T ~ "Missing",
+      is.na(R5_Result) == T |
+        is.na(R5_Result_S1) == T ~ "Missing",
+      R5_Result == "Negative" & R5_Result_S1 == "Negative" ~ "Naïve",
+      R5_Result == "Negative" & R5_Result_S1 == "Positive" ~ "Vaccinated",
+      R5_Result == "Positive" & 
+      R5_Result_S1 == "Negative" ~ "Infected,\nundefined vaccination",
+      
+      R5_Result == "Positive" & R5_Result_S1 == "Positive" &
+        R5_Vac == "No" ~ "Only infected",
+      R5_Result == "Positive" & R5_Result_S1 == "Positive" &
+        R5_Vac == "Yes" ~ "Infected & vaccinated",
+      R5_Result == "Positive" & R5_Result_S1 == "Positive" &
+        is.na(R5_Vac) == T ~ "Infected,\nundefined vaccination",
+      TRUE ~ "to define")) %>% 
+  dplyr::rename(`Baseline` = R1_result_words,
+         `Follow-up 1` = R2_Result_words,
+         `Follow-up 2` = R3_Result_words,
+         `Follow-up 3` = R4_Result_words,
+         `Follow-up 4` = R5_Result_words) -> data_sankey2_ever_simpl
+```
+
+
+```{r}
+data_sankey2_ever_simpl %>% 
+  make_long(`Baseline`, `Follow-up 1`, `Follow-up 2`, `Follow-up 3`, `Follow-up 4`)  %>% 
+  mutate(node = fct_relevel(node, 
+                            "Infected,\nundefined vaccination",
+                            "Missing", "Naïve", 
+                            "Vaccinated", 
+                            "Infected & vaccinated","Only infected"), 
+         next_node = fct_relevel(next_node,
+                            "Infected,\nundefined vaccination",
+                            "Missing", "Naïve", 
+                            "Vaccinated", 
+                            "Infected & vaccinated",
+                            "Only infected")) -> data_sankey_long_ever_simpl
+```
+
+
+
+```{r}
+ggplot(data_sankey_long_ever_simpl, aes(x = x, 
+               next_x = next_x, 
+               node = node, 
+               next_node = next_node,
+               fill = factor(node),
+               label = node)) +
+  geom_sankey(flow.alpha = 1, node.color = 1) +
+  theme_sankey(base_size = 16) +
+  geom_sankey_label(size = 7, color = 1,
+                    fill = "white") +
+  scale_fill_manual(values = c("mediumpurple4", "gray50",
+                               "lightpink3", "hotpink4",
+                               "brown3", "gray0")) +
+  xlab("") +
+  guides(fill = guide_legend(title = "")) +
+  theme(axis.title=element_text(size=20),
+        axis.text = element_text(size=25),
+        legend.position = "",
+        legend.title = element_text(size = 20),
+        legend.text = element_text(size = 25)) -> sankey_ever_simpl
+sankey_ever_simpl
+```
+
+```{r}
+setwd(path_data_rounds)
+ggsave("sankey_ever_positive_simpl.png",height=13,width = 17, units="in",dpi=720)
+ggsave("sankey_ever_positive_simpl.jpeg",height=13,width = 17, units="in",dpi=720)
+ggsave("sankey_ever_positive_simpl.pdf",height=13,width = 17, units="in",dpi=720)
+```
+
+
+## missing pattern analysis
+```{r}
+data_sankey %>% 
+  select(-c(R3_Vac, R4_Vac, R5_Vac)) %>% 
+  mutate(Baseline = R1_Result,
+         `FU1` = R2_Result,
+         `FU2` = coalesce(R3_Result, R3_Result_S1),
+         `FU3` = coalesce(R4_Result, R4_Result_S1),
+         `FU4` = coalesce(R5_Result, R5_Result_S1)) %>% 
+  select(Baseline, `FU1`, `FU2`, 
+         `FU3`, `FU4`) -> data_participation
+```
+
+```{r}
+data_participation %>% 
+  plot_pattern() + xlab("Number of missing values") +
+  ylab("Number of observations") + 
+  theme(axis.title=element_text(size=20),
+        axis.text = element_text(size=25),
+        legend.position = "bottom",
+        legend.title = element_text(size = 20),
+        legend.text = element_text(size = 25),
+        axis.text.x.top = element_text()) -> missing_values_plot
+missing_values_plot
+```
+
+
+```{r}
+(sankey_ever_simpl / missing_values_plot) +
+  plot_annotation(tag_levels = 'A') & 
+  theme(plot.tag = element_text(size = 30))
+```
+
+```{r}
+setwd(path_data_rounds)
+ggsave("Fig1_cohortDesc2.png",height=20,width = 19, units="in",dpi=720)
+ggsave("Fig1_cohortDesc2.jpeg",height=20,width = 19, units="in",dpi=720)
+ggsave("Fig1_cohortDesc2.pdf",height=20,width = 19, units="in",dpi=720)
+```
