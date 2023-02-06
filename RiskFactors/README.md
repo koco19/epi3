@@ -4,11 +4,16 @@ Codes for the risk factors analyses.
 
 ## Structure
 
-The code is located in the following folders:
+In the file `code_figure_3.Rmd` the code used to produce Figure 3 is contained.
+The code uses only one dataset:
+- Dataset 1.	The data resulted from the multiple imputation analysis (Results_mi.RDS).
 
-* `/Figures`: Contains the figures included in the paper related to the risk factors analyses.
-* `/Results`: Contains the tables related to the analyses of the risk factors.
-* `/Scripts`: Contains the R scripts to analyze the risk factors.
+In chunk 3 we calculate the Cox regression analysis for the non-reference categories.
+In chunks 4-5 there reference category is changed for the sum to zero analysis.
+In chunk 6 we calculate the Cox regression analysis for the reference categories.
+In chunks 7-9 the estimates with confidence intervals are put together and prepared for plotting (chunk 10).
+In chunk 11 the figure is saved.
+
 
 ## Contact
 
