@@ -1,0 +1,227 @@
+---
+title: "Code risk factors Epi round5"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+params:
+  path_PC_abhi: C:/Users/Noemi Castelletti/Desktop/koco19-data-mgmt/R/Analyse_n/KoCo19_Epi/risk_factor_analysis_abhi/
+  path_PC_NC: C:/Users/Noemi Castelletti/Desktop/koco19-data-mgmt/R/Analyse_n/KoCo19_Epi/
+---
+
+
+```{r include=FALSE}
+if (!require("pacman")) install.packages("pacman")
+library(pacman)
+p_load(tidyverse,
+       lubridate,
+       janitor,
+       tidytext,
+       openxlsx,
+       DBI,
+       fs,
+       RSQLite,
+       rvest,
+       glue,
+       readxl,
+       xlsx,
+       patchwork,
+       scales,
+       zoo,
+       rapport,
+       prettyR,
+       plyr,
+       dplyr,
+       summarytools,
+       mice,
+       survival,
+       frailtypack,
+       car)
+```
+
+## MI data Ronan
+```{r}
+Results_mi_RLG <- readRDS("C:/Users/Noemi Castelletti/Desktop/koco19-data-mgmt/R/Analyse_n/KoCo19_Epi/risk_factor_analysis_abhi/Results_mi_RLG.RDS")
+```
+
+```{r}
+model_imp <- with(Results_mi_RLG,
+                  coxph(Surv(rep(0,length(Results_mi_RLG$data$t_end)),
+                             t_end,ever_pos)~cluster(hh_id)+
+                          Sex*age_class_R1 + Birth_Country + education +
+                          employment + any_risk_emp +
+                          smoke + health + diabetes + lung + cvd +
+                          cancer + obesity + 
+                          resp_all  + skin_all + autoimmune +
+                          med_immunosupp + med_cortisone + med_blood + 
+                          income + hh_members + living + house_type))
+res <- pool(model_imp)
+res_r1 <- summary(res, conf.int = TRUE)
+res_r1
+```
+
+```{r}
+# copy object with the result of the MI
+res.imp_relevel <- Results_mi_RLG
+```
+
+```{r}
+# Change reference category
+res.imp_relevel$data$age_class_R1 <- relevel(res.imp_relevel$data$age_class_R1, ref = "80+")
+contrasts(res.imp_relevel$data$age_class_R1) <- contr.sum(n = 6)
+
+res.imp_relevel$data$education <- relevel(res.imp_relevel$data$education, ref = ">=12 years schooling") ##
+contrasts(res.imp_relevel$data$education) <- contr.sum(n = 3)
+
+res.imp_relevel$data$employment <- relevel(res.imp_relevel$data$employment, ref = "Others")
+contrasts(res.imp_relevel$data$employment) <- contr.sum(n = 4)
+
+res.imp_relevel$data$smoke <- relevel(res.imp_relevel$data$smoke, ref = "Current smoker")
+contrasts(res.imp_relevel$data$smoke) <- contr.sum(n = 3)
+
+res.imp_relevel$data$health <- relevel(res.imp_relevel$data$health, ref = "excellent")
+contrasts(res.imp_relevel$data$health) <- contr.sum(n = 4)
+
+res.imp_relevel$data$income <- relevel(res.imp_relevel$data$income, ref = "6001+")
+contrasts(res.imp_relevel$data$income) <- contr.sum(n = 4)
+
+res.imp_relevel$data$hh_members <- relevel(res.imp_relevel$data$hh_members, ref = "5+")
+contrasts(res.imp_relevel$data$hh_members) <- contr.sum(n = 4)
+
+res.imp_relevel$data$house_type <- relevel(res.imp_relevel$data$house_type, ref = "5+ apt")
+contrasts(res.imp_relevel$data$house_type) <- contr.sum(n = 3)
+
+res.imp_relevel$data$living <- relevel(res.imp_relevel$data$living, ref = "56+")
+contrasts(res.imp_relevel$data$living) <- contr.sum(n = 4)
+```
+
+
+```{r}
+model_imp2 <- with(res.imp_relevel,
+                   coxph(Surv(rep(0,length(Results_mi_RLG$data$t_end)),
+                              t_end,ever_pos)~cluster(hh_id)+
+                           Sex*age_class_R1 + Birth_Country + education +
+                           employment + any_risk_emp +
+                           smoke + health + diabetes + lung + cvd +
+                           cancer + obesity + 
+                           resp_all  + skin_all + autoimmune +
+                           med_immunosupp + med_cortisone + med_blood + 
+                           income + hh_members + living + house_type))
+res2 <- pool(model_imp2)
+res_r2 <- summary(res2, conf.int = TRUE)
+res_r2
+```
+
+```{r}
+res_r2_new <- res_r2[c(2, 8, 10, 14, 16, 30, 33, 36, 39, 41),]
+res_r2_new$term <- c("age_class_R16", "education3", "employment4", "smoke3", 
+                     "health4", "income4", "hh_members4",
+                     "living4", "house_type3", "SexMale:age_class_R16")
+```
+
+## finalizing for plot 
+```{r}
+res_r1 %>% 
+  rbind(res_r2_new) -> all_together #%>%
+```
+
+
+```{r}
+all_together %>% 
+  mutate(
+    estimate_exp = exp(estimate),
+    Lo_CI_exp = exp(`2.5 %`),
+    Up_CI_exp = exp(`97.5 %`),
+    names_understandable = c(
+      "Sex : Male", "Age : 14-19", "Age : 20-34",
+      "Age : 35-49", "Age : 50-64", "Age : 65-79", 
+      "Country of birth : Not Germany",
+      "Level of education : In school","Level of education : <12 years",
+      "Employment status : Employed", "Employment status : Self employed", 
+      "Employment status : Unemployed", "Risk employment : Yes",
+      "Smoking : Non smoker", "Smoking : Past smoker",
+      "General health : Not good", "General health : Good", 
+      "General health : Very good", 
+      "Diabetes : Yes", "Lung disease: Yes", "CVD : Yes", "Cancer : Yes",
+      "Obesity : Yes", "Respiratory allergies : Yes", "Skin allergies : Yes",
+      "Autoimmune disease : Yes", "Drug intake - Immunosuppressant : Yes",
+      "Drug intake - Costisone : Yes", "Drug intake - Blood : Yes",
+      "Household income : ≤2500", "Household income : 2501-4000",
+      "Household income : 4001-6000",
+      "Household size : 1", "Household size : 2", "Household size : 3-4", 
+      "Living area/inhabitant : ≤ 30", "Living area/inhabitant : 31-40",
+      "Living area/inhabitant : 41-55",
+      "Building type : 1-2", "Building type : 3-4",  
+      "Sex : Male, Age : 14-19", "Sex : Male, Age : 20-34",
+      "Sex : Male, Age : 35-49", "Sex : Male, Age : 50-64", 
+      "Sex : Male, Age : 65-79", 
+      "Age : 80+", "Level of education : ≥12 years",
+      "Employment status : Others", "Smoking : Current smoker", 
+      "General health : Excellent", "Household income : 6001+", 
+      "Household Size : 5+", "Living area/inhabitant : 56+", 
+      "Building type : 5+", "Sex : Male, Age : 80+"),
+    names_understandable_order = factor(names_understandable,levels=rev(c(
+      "Sex : Male", "Age : 14-19", "Age : 20-34", "Age : 35-49", 
+      "Age : 50-64", "Age : 65-79", "Age : 80+",
+      "Sex : Male, Age : 14-19", "Sex : Male, Age : 20-34", 
+      "Sex : Male, Age : 35-49", "Sex : Male, Age : 50-64",
+      "Sex : Male, Age : 65-79", "Sex : Male, Age : 80+", 
+      "Country of birth : Not Germany", 
+      "Level of education : In school", "Level of education : <12 years",
+      "Level of education : ≥12 years", 
+      "Employment status : Employed", "Employment status : Self employed", 
+      "Employment status : Unemployed", "Employment status : Others",
+      "Risk employment : Yes",
+      "Smoking : Non smoker", "Smoking : Past smoker",
+      "Smoking : Current smoker", 
+      "Building type : 1-2", "Building type : 3-4","Building type : 5+", 
+      "Household income : ≤2500", "Household income : 2501-4000",
+      "Household income : 4001-6000", "Household income : 6001+",
+      "Household size : 1", "Household size : 2", "Household size : 3-4",  
+      "Household Size : 5+",
+      "Living area/inhabitant : ≤ 30", "Living area/inhabitant : 31-40",
+      "Living area/inhabitant : 41-55", "Living area/inhabitant : 56+", 
+      "General health : Not good", "General health : Good",
+      "General health : Very good", "General health : Excellent", 
+      "Respiratory allergies : Yes", "Skin allergies : Yes", 
+      "Autoimmune disease : Yes", "Cancer : Yes",
+      "CVD : Yes", "Diabetes : Yes", "Lung disease: Yes", "Obesity : Yes", 
+      "Drug intake - Immunosuppressant : Yes", "Drug intake - Costisone : Yes",
+      "Drug intake - Blood : Yes"))), 
+    significances_plot = case_when(
+      p.value >= 0.05 ~"NS",
+      TRUE ~ "s")) -> res_exp
+```
+
+
+```{r}
+ggplot2::theme_set(ggplot2::theme_classic())
+```
+
+
+```{r}
+res_exp %>% 
+  ggplot(aes(y=names_understandable_order, x=estimate_exp, color = significances_plot)) +
+  geom_vline(xintercept = seq(0.5,3, by=0.5), color = "gray79") +
+  geom_hline(aes(yintercept = names_understandable), color = "gray79") +
+  geom_pointrange(aes(xmin = Lo_CI_exp, xmax = Up_CI_exp), size = 1) +
+  geom_vline(xintercept = 1, size = 1.5) +
+  theme(axis.title=element_text(size=25), axis.text = element_text(size=20),
+        #axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)),
+        #axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)),
+        legend.position="", legend.title = element_text(size = 20),
+        legend.text = element_text(size = 20) #,
+        #legend.spacing.x = unit(.5, 'cm'),
+        #axis.title.y.right = element_text(vjust=3)
+        ) +
+  xlab("Estimate (95% CI)") + ylab("") +
+  scale_color_manual(values = c("black","brown3")) 
+```
+
+
+```{r}
+setwd(params$path_PC_abhi)
+ggsave("risk_factor_analysis.jpeg",height=15,width = 15, units="in",dpi=720)
+ggsave("risk_factor_analysis.png",height=15,width = 15, units="in",dpi=720)
+ggsave("risk_factor_analysis.pdf",height=15,width = 15, units="in",dpi=720)
+```
