@@ -18,6 +18,7 @@ In chunks 11-12 we transform the date from daily format to a weekly format.
 In chunk 13 we plot and in chunk 14 we save the plot.
 
 
+
 In the file `code_figure_2.Rmd` the code used to produce Figure 2 is contained.
 The code uses only one dataset:
 - Dataset 1.	The cleaned and locked dataset for this analysis (R5_CompleteData_NC.RDS).
@@ -27,6 +28,7 @@ In chunk 4 we define the status of each sample: only infected (positive in only 
 In chunk 5-7 we produce and save the Sankey-plot.
 In chunks 8-9 we produce and save the missing value analysis.
 In chunk 10 we put the two plots together in one unique plot, save in chunk 11
+
 
 
 In the file `code_figure_S2.Rmd` the code used to produce Figure S2 is contained.
