@@ -4,7 +4,7 @@ Codes for the risk factors analyses.
 
 ## Structure
 
-In the file `code_figure_3.Rmd` the code used to produce Figure 3 is contained.
+In the file `code_figure_4.Rmd` the code used to produce Figure 4 is contained.
 The code uses only one dataset:
 - Dataset 1.	The data resulted from the multiple imputation analysis (Results_mi.RDS).
 
