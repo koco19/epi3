@@ -631,10 +631,10 @@ g_ef <- plot_grid(p_ef, l_ef, ncol = 1, rel_heights = c(1.1, .15))
 g_fin <- plot_grid(g_ab, g_cd, g_ef, ncol = 1)
 
 
-ggsave(here_prev_figures("Figure_4.png"), plot = g_fin, width = 30, height = 25, units = "cm")
+ggsave(here_prev_figures("Figure_3.png"), plot = g_fin, width = 30, height = 25, units = "cm")
 
-ggsave(here_prev_figures("Figure_4.pdf"), plot = g_fin, width = 30, height = 25, units = "cm")
+ggsave(here_prev_figures("Figure_3.pdf"), plot = g_fin, width = 30, height = 25, units = "cm")
 
-# ggsave(here_prev_figures("Figure_4.pdf"), plot = g_fin, width = 17, height = 15, units = "cm")
+# ggsave(here_prev_figures("Figure_3.pdf"), plot = g_fin, width = 17, height = 15, units = "cm")
 
 
