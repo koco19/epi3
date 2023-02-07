@@ -21,7 +21,7 @@ The code is is organized as follow:
 * `R5_Cumulative_Seroprevalence.R`: Computes the weighted seroprevalence estimates for round 5 calibrated on the vaccintation status using different imputed datasets produced by `Imputation.R`. This script produces the CSV files `r5_cum_sp_w_seedx.csv` stored in the folder `/Seroprevalence/Results/R5` (not available).
 * `R5_Cumulative_Seroprevalence_no_cal.R`: Computes the weighted seroprevalence estimates for round 5 not calibrated on the vaccination status using different imputed datasets produced by `Imputation.R`. This script produces the CSV files `r5_cum_sp_w_no_cal_seedx.csv` stored in the folder `/Seroprevalence/Results/R5` (not available).
 * `Aggregate_results_w.R`: Computes the final weighted sero-estimates (sero-incidence, seroprevalence depending on the vaccination status) for the different rounds R using the CSV files `rR_cum_sp_w_seedx.csv` and `rR_cum_sp_w_no_cal_seedx.csv` stored in the folders `/Seroprevalence/Results/RR` (not available). This script produces the CSV files `rR_cum_sp_w.csv` and `rR_cum_sp_w_no_cal.csv` for the different rounds R in the folder `/Seroprevalence/Results`.
-* `Plots_seroprevalence.R`: Plots the seroprevalence estimates (weighted and unweighted). This script produces the file `Prevalence_incidence_final.png` in the folder `/Seroprevalence/Figures`.
+* `Plots_seroprevalence.R`: Plots the seroprevalence estimates (weighted and unweighted). This script produces the files `Figure_3.pdf` `Figure_3.png` in the folder `/Seroprevalence/Figures`.
 * `my_gg.gap.R`: Modified version of the function gg.gap() to show % on the y-axis (used in `Plots_seroprevalence.R`).
 
 ## Contact
